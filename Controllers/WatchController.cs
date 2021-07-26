@@ -76,7 +76,7 @@ namespace API.Controllers
         }
 
         [HttpPut("stop/{runToken}")]
-        public async Task<ActionResult<RunDoneDto>> StopStopwatch(string runToken)
+        public async Task<ActionResult<ResultsDto>> StopStopwatch(string runToken)
         {
             Run run = _context.Runs
                     //.Include(run => run.LapTimes)
@@ -93,10 +93,22 @@ namespace API.Controllers
                                             .ToListAsync();
 
             var runToReturn = _mapper.Map<RunDoneDto>(run);
-
             
-
-            return Ok(runToReturn);
+            var lapsArr = runToReturn.LapTimes.ToArray();
+            IEnumerable<string> laps = new List<string>();
+            laps = laps.Append((lapsArr[0].LapTime - runToReturn.StartTime).ToString());
+            for (int i = 1; i < lapsArr.Length; i++)
+            {
+                laps = laps.Append((lapsArr[i].LapTime - lapsArr[i-1].LapTime).ToString());
+                Console.WriteLine(laps.ElementAt(i));
+            }
+            ResultsDto results = new ResultsDto{
+                Laps = laps,
+                //runToReturn.LapTimes.Select((i, lapTime) => (lapTime.LapTime - runToReturn.StartTime).ToString()),
+                TotalTime = (runToReturn.EndTime-runToReturn.StartTime).ToString()
+            };
+            
+            return Ok(results);
             /*return new RunDoneDto{
 
             };*/
