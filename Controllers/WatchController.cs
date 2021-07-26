@@ -100,18 +100,14 @@ namespace API.Controllers
             for (int i = 1; i < lapsArr.Length; i++)
             {
                 laps = laps.Append((lapsArr[i].LapTime - lapsArr[i-1].LapTime).ToString());
-                Console.WriteLine(laps.ElementAt(i));
+                //Console.WriteLine(laps.ElementAt(i));
             }
             ResultsDto results = new ResultsDto{
                 Laps = laps,
-                //runToReturn.LapTimes.Select((i, lapTime) => (lapTime.LapTime - runToReturn.StartTime).ToString()),
                 TotalTime = (runToReturn.EndTime-runToReturn.StartTime).ToString()
             };
             
             return Ok(results);
-            /*return new RunDoneDto{
-
-            };*/
         }
     }
 }
